@@ -1,0 +1,115 @@
+.px-regular {
+  padding: 0 24px;
+}
+
+.select-none {
+  user-select: none;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.ml-auto {
+  margin-left: auto;
+}
+
+.mr-auto {
+  margin-left: auto;
+}
+
+.w-100 {
+  width: 100%;
+}
+
+.w-25 {
+  width: 25%;
+}
+
+.w-75 {
+  width: 75%;
+}
+
+.w-50 {
+  width: 50%;
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-row {
+  flex-direction: row;
+}
+
+.flex-column {
+  flex-direction: column;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+.flex-nowrap {
+  flex-wrap: nowrap;
+}
+
+.justify-content {
+  &-center {
+    justify-content: center;
+  }
+  &-between {
+    justify-content: space-between;
+  }
+  &-around {
+    justify-content: space-around;
+  }
+  &-start {
+    justify-content: flex-start;
+  }
+  &-end {
+    justify-content: flex-end;
+  }
+}
+
+.align-items {
+  &-center {
+    align-items: center;
+  }
+  &-start {
+    align-items: flex-start;
+  }
+  &-end {
+    align-items: flex-end;
+  }
+  &-between {
+    align-items: stretch;
+  }
+}
+
+
+.pr-regular {
+  padding-right: 24px;
+}
+.pl-regular {
+  padding-left: 24px;
+}
+.pt-regular {
+  padding-top: 24px;
+}
+.pb-regular {
+  padding-bottom: 24px;
+}
+
+.mr-regular {
+  margin-right: 24px;
+}
+.ml-regular {
+  margin-left: 24px;
+}
+.mt-regular {
+  margin-top: 24px;
+}
+.mb-regular {
+  margin-bottom: 24px;
+}

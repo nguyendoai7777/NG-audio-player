@@ -1,0 +1,96 @@
+@import '@angular/material/prebuilt-themes/indigo-pink.css';
+@import "src/assets/styles/function";
+#title-bar-title-box {
+  -webkit-app-region: drag;
+}
+* {
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  user-select: none;
+}
+body {
+  overflow: hidden;
+}
+.icon-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
+  transition: all var(--icon-transition-duration);
+  @include IconButtonActionStyleWithRipple;
+}
+.icon {
+  width: 20px;
+  height: 20px;
+  fill: var(--icon-fill);
+}
+.icon-regular {
+  width: 25px;
+  height: 25px;
+  fill: var(--icon-fill);
+}
+.nav-icon-btn-disabled {
+  opacity: 0.6;
+  cursor: default;
+  pointer-events: none;
+}
+.top-divider {
+  position: relative;
+  &:after {
+    content: "";
+    display: block;
+    position: absolute;
+    top: -1px;
+    height: 1px;
+    width: 90%;
+    background-color: var(--main-color);
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
+
+
+
+
+
+/** @start custom material */
+.mat-cs {
+  .mat-dialog-container {
+    background-color: unset;
+    padding: unset;
+  }
+  .mat-tab-label-container {
+    border-bottom: 1px solid var(--border-general-color);
+    .mat-ink-bar {
+      background-color: var(--main-color) !important;
+    }
+    .mat-tab-labels {
+      .mat-ripple-element {
+        background-color: var(--mat-ripple-element-color) !important;
+      }
+    }
+    .mat-tab-label {
+      min-width: unset;
+      user-select: none;
+    }
+    .mat-tab-label-content {
+      color: var(--text-color)
+    }
+  }
+}
+
+.duration-controller {
+  width: 75%;
+   &.mat-slider-horizontal {
+    .mat-slider-track-wrapper {
+      background-color: var(--slider-color);
+    }
+  }
+  &.mat-slider.mat-slider-min-value:not(.mat-slider-thumb-label-showing) .mat-slider-thumb {
+    background-color: var(--slider-color);
+  }
+}

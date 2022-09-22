@@ -1,0 +1,41 @@
+.import-btn {
+  padding: 10px 0;
+  border-top: 1px solid var(--border-light-color);
+  border-bottom: 1px solid var(--border-light-color);
+}
+
+.tab-item {
+  height: calc(100vh - var(--media-controller-height) - (174px) - 32px);
+  overflow: auto;
+}
+
+.song {
+  border-radius: 4px;
+  padding: 15px 10px;
+  transition: var(--transition);
+  font-size: 13px;
+  &:nth-child(odd) {
+    background-color: #4e4e4e5e;
+  }
+  &:hover {
+    background-color: #ffffff57;
+  }
+}
+
+.song-list {
+  padding: 10px 0;
+}
+
+.special-tab {
+  .mat-tab-header {
+    margin-right: 24px;
+  }
+  .song-list {
+    padding-right: 18px;
+  }
+}
+.song-state {
+  width: 40px;
+  height: 40px;
+  fill: #fff;
+}

@@ -1,0 +1,11 @@
+<title-bar></title-bar>
+<div class="main-layout">
+  <sidebar></sidebar>
+  <div class="outlet-point" [@fadeAnimation]="data.isActivated ? data.activatedRoute : ''">
+      <div class="px-regular">
+        <div class="route-name" [@fadeAnimation]="">{{routeData$ | async}}</div>
+      </div>
+    <router-outlet #data="outlet"></router-outlet>
+  </div>
+</div>
+<media-controller></media-controller>

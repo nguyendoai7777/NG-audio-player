@@ -1,0 +1,30 @@
+<div class="heading">Build your collection from your local music files</div>
+<div class="detail">Right now, we're watching these folders:</div>
+
+<div class="po-body flex flex-column align-items-center scrollbar-styling">
+  <div
+    matRipple
+    [matRippleColor]="matRippleColor"
+    (click)="addDir()"
+    class="cursor-pointer abstract-folder flex justify-content-center align-items-center"
+  >
+    <svg class="icon">
+      <use xlink:href="#add"></use>
+    </svg>
+  </div>
+
+  <div
+    *ngFor="let dir of listDir"
+    matRipple [matRippleColor]="matRippleColor"
+    (click)="removeDir(dir.name)"
+    class="cursor-pointer abstract-folder justify-content-center align-items-start flex-column flex align-items-center">
+    <div class="folder-name">{{dir.name}}</div>
+    <div class="folder-path">{{dir.path}}</div>
+    <svg class="po-close"><use xlink:href="#close-bold"/></svg>
+  </div>
+
+</div>
+
+<div class="po-footer">
+  <div (click)="done()" matRipple [matRippleColor]="matRippleColor" class="ml-auto select-none po-done-btn cursor-pointer flex justify-content-center align-items-center">Done</div>
+</div>

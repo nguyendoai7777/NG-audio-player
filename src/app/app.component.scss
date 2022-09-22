@@ -1,0 +1,25 @@
+@import 'src/assets/styles/var';
+:host {
+  display: block;
+  .main-layout {
+    * {
+      color: var(--text-color);
+    }
+    height: calc(100vh - var(--media-controller-height) - var(--titlebar-height));
+    display: flex;
+    .outlet-point {
+      background-color: #010101;
+      height: 100%;
+      flex: 1;
+    }
+  }
+  .route-name {
+    font-size: 34px;
+    padding: 15px 0;
+  }
+}
+.title-bar {
+  height: 30px;
+  background-color: #2D2F35;
+  width: 100%
+}

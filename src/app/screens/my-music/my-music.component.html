@@ -1,0 +1,20 @@
+<div class="px-regular" style="padding-right: 0;">
+  <div class="import-btn mr-regular">
+    <import-music-folder (click)="openImportConfirmPopup()"></import-music-folder>
+  </div>
+  <mat-tab-group class="special-tab">
+    <mat-tab label="Songs">
+      <div class="tab-item song-list scrollbar-styling">
+        <ng-container *ngTemplateOutlet="allSong"></ng-container>
+      </div>
+    </mat-tab>
+    <mat-tab label="Albums"><span class="tab-item">1231</span></mat-tab>
+    <mat-tab label="Artists"><span class="tab-item">1231</span></mat-tab>
+  </mat-tab-group>
+</div>
+
+<ng-template #allSong>
+  <div *ngFor="let song of allSongs; index as i" class="flex song" (click)="play(song, i)">
+    <div class="name">{{song.name}} </div> <svg class="song-state"> <use [attr.xlink:href]="song.isPlaying ? '#pause': '#play'" /></svg> <pre>{{song.isPlaying | json}}</pre>
+  </div>
+</ng-template>

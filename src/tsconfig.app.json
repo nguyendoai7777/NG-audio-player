@@ -1,0 +1,30 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../out-tsc/app",
+    "baseUrl": "./",
+    "types": [
+      "node"
+    ],
+    "paths": {
+      "@services/*": ["app/shared/services/*"],
+      "@interfaces/*": ["app/shared/interfaces/*"],
+      "@directives/*": ["app/shared/directives/*"],
+      "@screens/*": ["app/screens/*"],
+      "@core-services/*": ["app/core/services/*"],
+      "@components/*": ["app/components/*"],
+      "@cell-components/*": ["app/cell-components/*"],
+      "@constants/*": ["app/shared/constant/*"]
+    }
+  },
+  "files": [
+    "main.ts",
+    "polyfills.ts"
+  ],
+  "include": [
+    "**/*.d.ts"
+  ],
+  "exclude": [
+    "**/*.spec.ts"
+  ]
+}

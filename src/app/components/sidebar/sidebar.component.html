@@ -1,0 +1,40 @@
+<div class="flex head-controller">
+  <icon-button-svg matRipple [matRippleColor]="rippleColor" [disabled]="disableBack$ | async" (click)="goPrevious()" href="arrow-back"></icon-button-svg>
+  <icon-button-svg matRipple [matRippleColor]="rippleColor" (click)="goNext()" href="arrow-next"></icon-button-svg>
+
+
+  <div class="ml-auto">
+    <icon-button-svg (click)="toggleSide()" matRipple [matRippleColor]="rippleColor" href="menu"></icon-button-svg>
+  </div>
+</div>
+
+<div class="side-main">
+  <div class="search-box">
+    <div class="input-area">
+      <input type="text" placeholder="Search..." autocomplete="off">
+      <div matRipple [matRippleColor]="rippleColor" class="search-icon flex align-items-center justify-content-center cursor-pointer">
+        <svg class="icon ">
+          <use xlink:href="#search"/>
+        </svg>
+      </div>
+      <div matRipple [matRippleColor]="rippleColor" class="close-icon flex align-items-center justify-content-center cursor-pointer">
+        <svg class="icon">
+          <use xlink:href="#close"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <div class="on-hide nav-btn-list">
+    <nav-button *ngFor="let nav of navBtns" [routerLink]="nav.routerLink" [label]="nav.label" [iconHref]="nav.iconHref"></nav-button>
+  </div>
+  <div class="on-hide top-divider flex">
+    <nav-button routerLink="playlists" label="Playlist" iconHref="play-list"></nav-button>
+    <icon-button-svg matRipple [matRippleColor]="rippleColor" (click)="goNext()" href="add"></icon-button-svg>
+  </div>
+
+</div>
+
+<div class="on-hide side-footer top-divider">
+  <nav-button routerLink="setting" label="Settings" iconHref="setting-outlined"></nav-button>
+</div>

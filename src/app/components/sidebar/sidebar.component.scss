@@ -1,0 +1,101 @@
+@import "src/assets/styles/function";
+@import "src/assets/styles/var";
+
+:host {
+  display: flex;
+  flex-direction: column;
+  width: var(--sidebar-width);
+  min-width: var(--sidebar-width);
+  max-width: var(--sidebar-width);
+  background-color: #2D2F35;
+  transition: all var(--transition);
+  overflow: hidden;
+  &.SidebarExpanded {
+    width: 50px;
+    min-width: 50px;
+    max-width: 50px;
+    .side-main {
+      .search-box {
+        overflow: hidden;
+        height: 0;
+        margin-top: 0;
+        opacity: 0;
+        .search-icon, .close-icon {
+          display: none;
+        }
+      }
+    }
+    .head-controller {
+
+      & > icon-button-svg {
+        display: none;
+      }
+    }
+    .on-hide {
+      margin: 0;
+      ::ng-deep nav-button .label.select-none {
+        opacity: 0;
+      }
+    }
+  }
+  .side-main {
+    height: calc(100vh - 111px);
+    transition: var(--transition);
+  }
+  .side-footer {
+  }
+  .search-box {
+    transition: all var(--transition);
+    margin-top: 5px;
+    padding: 0 15px;
+    height: 38px;
+  }
+  .input-area {
+    position: relative;
+    input {
+      background-color: var(--light-color);
+      border: none;
+      width: 100%;
+      color: var(--text-input-color);
+      padding: 10px 60px 10px 10px;
+      transition: all var(--transition);
+      font-size: 16px;
+      &::placeholder {
+        user-select: none;
+      }
+      &:focus {
+        border: none;
+        outline: none;
+        background: rgba(255, 255, 255, 0.85);
+        color: var(--icon-input-focus-color);
+        & ~ svg,
+        & ~ .close-icon svg,
+        & ~ .search-icon svg, {
+          fill: var(--icon-input-focus-color);
+        }
+      }
+    }
+    @mixin icon-pos {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-48%);
+      width: 25px;
+      height: 25px;
+      border-radius: 3px;
+      @include IconButtonActionStyle;
+    }
+    .search-icon {
+      @include icon-pos;
+      right: 7px;
+    }
+    .close-icon {
+      @include icon-pos;
+      right: 37px;
+      top: 48%;
+    }
+  }
+  .nav-btn-list {
+    width: 100%;
+    margin-top: 12px;
+  }
+}

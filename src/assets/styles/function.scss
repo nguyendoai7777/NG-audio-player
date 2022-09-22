@@ -1,0 +1,13 @@
+@mixin IconButtonActionStyle {
+  &:hover {
+    background-color: var(--icon-button-hover-color);
+  }
+  &:active {
+    background-color: var(--icon-button-active-color);
+  }
+}
+@mixin IconButtonActionStyleWithRipple {
+  &:hover {
+    background-color: var(--icon-button-hover-color);
+  }
+}

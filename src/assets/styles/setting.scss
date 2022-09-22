@@ -1,0 +1,30 @@
+.scrollbar-styling {
+  &::-webkit-scrollbar-track {
+    //   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    background-color: transparent;
+    border-radius: 10px;
+    visibility: hidden;
+  }
+  &::-webkit-scrollbar {
+    width: 6px;
+    background-color: transparent;
+    visibility: hidden;
+  }
+  &::-webkit-scrollbar-thumb {
+    border-radius: 8px;
+    background-color: #4e4e4e;
+    visibility: hidden;
+  }
+  &:hover {
+    &::-webkit-scrollbar-track {
+      visibility: visible;
+    }
+    &::-webkit-scrollbar {
+      visibility: visible;
+    }
+    &::-webkit-scrollbar-thumb {
+      visibility: visible;
+    }
+  }
+}
+

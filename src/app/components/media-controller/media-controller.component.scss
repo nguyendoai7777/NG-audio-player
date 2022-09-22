@@ -1,0 +1,76 @@
+@import 'src/assets/styles/var';
+:host {
+  display: flex;
+  height: var(--media-controller-height);
+  position: relative;
+  width: 100%;
+  &:after {
+    content: '';
+    display: block;
+    opacity: .3;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    z-index: -1;
+    right: 0;
+    background-color: var(--main-color)
+  }
+}
+.info-box {
+  width: var(--sidebar-width);
+  * {
+    color: var(--text-color)
+  }
+  .song-info {
+    padding: 10px 0 10px 7px;
+    .artist {
+      padding-top: 7px;
+      font-size: 12px;
+    }
+  }
+  .disc-avatar {
+    width: var(--media-controller-height);
+    height: var(--media-controller-height);
+    border-radius: 50%;
+    background: linear-gradient(40deg, rgba(2, 0, 36, 1) 0%, rgba(9, 9, 121, 1) 10%, rgba(84, 255, 0, 1) 20%, rgba(61, 0, 255, 1) 30%, rgba(255, 96, 0, 1) 37%, rgba(0, 255, 19, 1) 50%, rgba(0, 255, 211, 1) 60%, rgba(255, 0, 217, 1) 70%, rgba(234, 255, 0, 1) 80%, rgba(109, 0, 255, 1) 90%, rgba(255, 0, 59, 1) 100%);
+  }
+}
+.sub-controller {
+  flex: 1;
+}
+.controller {
+  padding-top: 5px;
+  flex: 3;
+  .icon-button {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    #sff {
+      width: 25px;
+      height: 25px;
+    }
+    .con {
+      width: 20px;
+      height: 20px;
+    }
+
+    svg {
+      fill: var(--icon-fill);
+    }
+  }
+  .center-controller {
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    #center {
+      width: 30px;
+      height: 30px;
+    }
+    svg {
+      fill: var(--icon-fill);
+    }
+  }
+}
+
+

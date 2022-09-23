@@ -1,5 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { AudioPlayerService } from '@core-services/audio-player.service';
+import { throttleTime } from 'rxjs';
+import { convertDurationToTime } from '../../core/module/module.features';
+import { Song } from '@interfaces/music.interface';
+import { MatSliderChange } from '@angular/material/slider';
 
 @Component({
   selector: 'media-controller',
@@ -7,16 +11,128 @@ import { AudioPlayerService } from '@core-services/audio-player.service';
   styleUrls: ['./media-controller.component.scss']
 })
 export class MediaControllerComponent implements OnInit {
-
+  isPlaying = false;
+  currentTime = '';
+  endTime = '';
   currentValue = 0;
+  currentSong: Song;
+  duration = this.audioService.duration$;
+  d = 0;
+  currentVolume = 0;
+  isMute = false;
+  loopState = 0;
+  shuffleState = 0;
 
-  current
-  constructor(private audioService: AudioPlayerService) {}
-
-  ngOnInit(): void {
-    this.audioService.currentSong$.subscribe(song => {
-      console.log(`currentSong: `, song);
-    });
+  constructor(
+    public audioService: AudioPlayerService,
+    private cdr: ChangeDetectorRef
+  ) {
   }
 
+  ngOnInit(): void {
+    this.audioService.currentTime$.pipe(throttleTime(1000)).subscribe((time: number) => {
+      this.currentValue = Math.floor(time);
+      this.cdr.detectChanges();
+      console.log(this.currentValue);
+      this.currentTime = convertDurationToTime(this.currentValue);
+      this.cdr.detectChanges();
+
+    });
+    this.duration.subscribe(e => {
+      this.d = e;
+      this.endTime = convertDurationToTime(this.d);
+      this.cdr.detectChanges();
+    });
+    this.audioService.currentSong$.subscribe(song => {
+      this.isPlaying = song?.isPlaying || false;
+      this.cdr.detectChanges();
+      this.currentSong = song;
+      this.cdr.detectChanges();
+    });
+    this.currentVolume = +(localStorage.getItem('volume')) ?? 50;
+    this.loopState = localStorage.getItem('loopState') ? +localStorage.getItem('loopState') : this.loopState;
+    this.shuffleState = localStorage.getItem('shuffleState') ? +localStorage.getItem('shuffleState') : this.shuffleState;
+    this.isMute = this.currentVolume === 0;
+    this.setVolume();
+  }
+
+  onTimeChange({ value }: MatSliderChange) {
+    this.audioService.setCurrentTime(value);
+  }
+
+  onVolumeChange({ value }: MatSliderChange) {
+    this.currentVolume = value;
+    this.setVolume();
+    localStorage.setItem('volume', value.toString());
+  }
+
+  volumeChangeByWheel({ deltaY }: WheelEvent) {
+    if (deltaY < 0) {
+      if (this.currentVolume < 100) {
+        this.currentVolume += 2;
+      }
+    } else {
+      if (this.currentVolume > 0) {
+        this.currentVolume -= 2;
+      }
+    }
+    this.setVolume();
+    this.saveVolume();
+  }
+
+  saveVolume() {
+    const s = setTimeout(() => {
+      localStorage.setItem('volume', this.currentVolume.toString());
+      clearTimeout(s);
+    }, 100);
+  }
+
+  setVolume() {
+    this.audioService.audio && (this.audioService.audio.volume = this.currentVolume * .01);
+  }
+
+  consecutiveChange({ value }: MatSliderChange) {
+    this.currentVolume = value;
+    this.setVolume();
+  }
+
+  togglePlay() {
+    this.isPlaying = !this.isPlaying;
+    this.currentSong && this.audioService.play({
+      isPlaying: this.isPlaying,
+      dirName: this.currentSong.dirName,
+      name: this.currentSong.name
+    }, true, this.audioService.currentIndex);
+  }
+
+  toggleShuffle() {
+    this.shuffleState = (this.shuffleState + 1) % 2;
+    localStorage.setItem('shuffleState', this.shuffleState.toString());
+  }
+
+  toggleVolume() {
+    this.isMute = !this.isMute;
+    if (this.isMute) {
+      this.currentVolume = 0;
+    } else {
+      this.currentVolume = this.currentVolume = +(localStorage.getItem('volume')) ?? 50;
+    }
+    this.setVolume();
+    this.saveVolume();
+  }
+
+  setLoop() {
+    this.loopState = ((this.loopState + 1) % 3);
+/*    switch (this.loopState) {
+      case 0:  // no loop
+        break;
+      case 1:  // loop all
+        break;
+      case 2: // loop current song
+        break;
+      default:
+        break;
+    }*/
+    localStorage.setItem('loopState', this.loopState.toString());
+  }
 }

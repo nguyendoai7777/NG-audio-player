@@ -1,3 +1,5 @@
+
+
 <div class="px-regular" style="padding-right: 0;">
   <div class="import-btn mr-regular">
     <import-music-folder (click)="openImportConfirmPopup()"></import-music-folder>
@@ -14,7 +16,18 @@
 </div>
 
 <ng-template #allSong>
-  <div *ngFor="let song of allSongs; index as i" class="flex song" (click)="play(song, i)">
-    <div class="name">{{song.name}} </div> <svg class="song-state"> <use [attr.xlink:href]="song.isPlaying ? '#pause': '#play'" /></svg> <pre>{{song.isPlaying | json}}</pre>
+  <div *ngFor="let song of allSongs; index as i" class="flex song align-items-center" (click)="play(song, i)">
+    <ng-container *ngIf="currentIndex === i">
+      <svg width="20" height="20" class="now-playing"><use [attr.href]="song.isPlaying ? '#now-playing-c': '#now-pause-c'" /></svg>
+    </ng-container>
+    <div class="name">{{song.name}} </div>
+    <div class="play-btn icon-button rad" matRipple>
+      <svg
+        [style.opacity]="currentIndex === i? '1': ''"
+        class="song-state cursor-pointer"
+        [style.transform]="!song.isPlaying ? 'translateX(2px)' : ''">
+        <use [attr.xlink:href]="song.isPlaying ? '#pause': '#play'"/>
+      </svg>
+    </div>
   </div>
 </ng-template>

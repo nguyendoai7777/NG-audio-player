@@ -4,7 +4,7 @@ export interface SongInfo {
 
 export interface Song {
   name: string;
-  duration: number;
+  duration?: number;
   albums?: string;
   dirName?: string;
   isPlaying?: boolean;
@@ -21,3 +21,4 @@ export type MusicDirInfoInDialog = Omit<MusicDirInfo, 'songs'>;
 export interface DirOfSongData {
   listDir: MusicDirInfo[];
 }
+

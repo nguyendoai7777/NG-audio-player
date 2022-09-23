@@ -1,48 +1,94 @@
 <div class="info-box flex">
   <div class="disc-avatar"></div>
   <div class="song-info">
-    <div class="name">Ngày đen trắng</div>
+    <div class="name">{{currentSong?.name}}</div>
     <div class="artist">huỳnh tú</div>
   </div>
 </div>
 <div class="flex" style="flex: 1;">
   <div class="controller">
     <div class="header-group flex justify-content-center align-items-center">
-      <div class="icon-button flex align-items-center justify-content-center" matRipple>
+      <div
+        [class.t-action-active]="this.shuffleState === 1"
+        (click)="toggleShuffle()"
+        class="icon-button flex align-items-center justify-content-center"
+        matRipple>
         <svg id="sff">
           <use xlink:href="#shuffle"/>
         </svg>
       </div>
-      <div class="icon-button flex align-items-center justify-content-center" matRipple>
+      <div
+        matRipple
+        class="icon-button flex align-items-center justify-content-center"
+        (click)="currentSong && audioService.previousSong(audioService.currentIndex)"
+      >
         <svg class="con">
           <use xlink:href="#prev"/>
         </svg>
       </div>
 
-      <div class="center-controller icon-button flex align-items-center justify-content-center" matRipple>
-        <svg id="center">
-          <use xlink:href="#play"/>
+      <div (click)="currentSong && togglePlay()" class="center-controller icon-button flex align-items-center justify-content-center" matRipple>
+        <svg id="center" [style.transform]="!isPlaying ? 'translateX(2px)' : ''">
+          <use [attr.xlink:href]="isPlaying? '#pause' : '#play'"/>
         </svg>
       </div>
-      <div class="icon-button flex align-items-center justify-content-center" matRipple>
+      <div
+        class="icon-button flex align-items-center justify-content-center"
+        matRipple
+        (click)=" currentSong && audioService.nextSong(audioService.currentIndex)"
+      >
         <svg class="con">
           <use xlink:href="#next"/>
         </svg>
       </div>
-      <div class="icon-button flex align-items-center justify-content-center" matRipple>
+      <div
+        [class.t-action-active]="this.loopState !== 0"
+        (click)="setLoop()"
+        class="icon-button flex align-items-center justify-content-center relative"
+        matRipple>
         <svg class="con">
           <use xlink:href="#loop"/>
         </svg>
+        <div *ngIf="loopState === 2" class="loop-one">1</div>
       </div>
     </div>
+    <div class="flex align-items-center justify-content-center slider-n-timer" [style.height]="!currentSong ? '0' : '48px'">
+      <div class="time-controller" style="text-align: right">
+        {{currentSong ? currentTime : ''}}
+      </div>
+      <mat-slider
+        class="duration-controller"
+        [min]="0"
+        [max]="d"
+        [(ngModel)]="currentValue"
+        (change)="onTimeChange($event)"
+      ></mat-slider>
+      <div class="time-controller">
+        {{currentSong ? endTime : ''}}
+      </div>
+    </div>
+  </div>
+  <div class="sub-controller flex align-items-center">
+    <div class="icon-button v-button" matRipple (click)="toggleVolume()">
+      <svg class="v-icon flex align-items-center justify-content-center">
+        <use [attr.href]="
+          currentVolume <= 0 ? '#v-mute'
+          : (currentVolume > 0 && currentVolume <= 20) ? '#v-small'
+          : (currentVolume > 20 && currentVolume < 75) ? '#v-medium'
+          : '#v-max'
+        "/>
+      </svg>
+    </div>
+
     <mat-slider
+      (input)="consecutiveChange($event)"
+      (wheel)="volumeChangeByWheel($event)"
       class="duration-controller"
       [min]="0"
       [max]="100"
-      [(ngModel)]="currentValue"
+      [(ngModel)]="currentVolume"
+      (change)="onVolumeChange($event)"
     ></mat-slider>
   </div>
-  <div class="sub-controller">
-
-  </div>
 </div>
+

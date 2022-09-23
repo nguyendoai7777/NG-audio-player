@@ -25,14 +25,9 @@ export class SidebarComponent implements OnInit {
     private router: Router,
     private location: Location,
     private unsubscribeService: UnsubscribeService,
-    private elr: ElementRef<HTMLElement>,
-    private es: ElectronService
+    private elr: ElementRef<HTMLElement>
   ) {
-    this.es.ipcRenderer.on(SIDEBAR_ACTION.ProcessToView.EXPAND_SIDEBAR_STATE, (_, data) => {
-      this.isExpanded = data;
-      this.checkExpanded();
-    });
-
+    this.isExpanded = (localStorage.getItem('isSideExpanded') || '1') === '1';
   }
 
   ngOnInit(): void {
@@ -41,6 +36,7 @@ export class SidebarComponent implements OnInit {
       filter(e => e instanceof NavigationEnd),
       map((e: NavigationEnd) => e.url === ROOT_ROUTES[0].path)
     );
+    this.checkExpanded();
   }
 
   goPrevious() {
@@ -52,10 +48,11 @@ export class SidebarComponent implements OnInit {
     this.location.forward();
   }
 
+
   toggleSide() {
     this.isExpanded = !this.isExpanded;
+    localStorage.setItem('isSideExpanded', this.isExpanded ? '1' : '0');
     this.checkExpanded();
-    this.es.toggleSidebar(this.isExpanded);
   }
 
   checkExpanded() {

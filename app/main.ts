@@ -4,7 +4,6 @@ import * as fs from 'fs';
 import { STORAGE_KEY, LocalKey } from '../shared/storage-key.const';
 import { APP_ACTION, MUSIC_ACTION, SIDEBAR_ACTION, TITLE_BAR_ACTION } from '../shared/communication.actions.const';
 import { MusicDirInfo } from '../src/app/shared/interfaces/music.interface';
-const { protocol } = require('electron');
 const os = require('os');
 
 class SettingStorage {
@@ -16,7 +15,8 @@ class SettingStorage {
       this.setData(defaultData);
     } else {
       if (!fs.existsSync(`${os.homedir()}\\groover\\settings.json`)) {
-        this.setData(defaultData);
+        fs.writeFileSync(`${os.homedir()}\\groover\\settings.json`, JSON.stringify({MusicDirectories: []}));
+        // this.setData(defaultData);
       }
     }
   }

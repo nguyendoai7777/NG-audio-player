@@ -164,5 +164,8 @@
       }
     }
   },
-  "defaultProject": "angular-electron"
+  "defaultProject": "angular-electron",
+  "cli": {
+    "analytics": false
+  }
 }

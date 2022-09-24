@@ -67,7 +67,8 @@ export class MyMusicComponent implements OnInit {
 
   onLoad() {
     this.es.ipcRenderer.on(MUSIC_ACTION.ProcessToView.FIRE_DIR_LIST, (_, data) => {
-      this.listDir = data;
+      console.log(data);
+      this.listDir = data || [];
       for (const { songs } of this.listDir) {
         for (const { name, duration, dirName } of songs) {
           this.allSongs.push({
@@ -84,7 +85,8 @@ export class MyMusicComponent implements OnInit {
         path: data.path
       }));
     });
-    this.listDirWithoutSongs = this.es.listDir.map(data => ({
+    console.log(this.es);
+    this.listDirWithoutSongs = (this.es.listDir || []).map(data => ({
       name: data.name,
       path: data.path
     }));

@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { AudioPlayerService } from '@core-services/audio-player.service';
 import { throttleTime } from 'rxjs';
 import { convertDurationToTime } from '../../core/module/module.features';
@@ -11,6 +11,9 @@ import { MatSliderChange } from '@angular/material/slider';
   styleUrls: ['./media-controller.component.scss']
 })
 export class MediaControllerComponent implements OnInit {
+  @ViewChild('songName', { static: true }) songName: ElementRef<HTMLDivElement>;
+  @ViewChild('songWrapper', { static: true }) songWrapper: ElementRef<HTMLDivElement>;
+  @ViewChild('animateText', { static: true }) animateText: ElementRef<HTMLDivElement>;
   isPlaying = false;
   currentTime = '';
   endTime = '';
@@ -22,7 +25,7 @@ export class MediaControllerComponent implements OnInit {
   isMute = false;
   loopState = 0;
   shuffleState = 0;
-
+  tooLong = false;
   constructor(
     public audioService: AudioPlayerService,
     private cdr: ChangeDetectorRef
@@ -33,7 +36,7 @@ export class MediaControllerComponent implements OnInit {
     this.audioService.currentTime$.pipe(throttleTime(1000)).subscribe((time: number) => {
       this.currentValue = Math.floor(time);
       this.cdr.detectChanges();
-      console.log(this.currentValue);
+      // console.log(this.currentValue);
       this.currentTime = convertDurationToTime(this.currentValue);
       this.cdr.detectChanges();
 
@@ -48,6 +51,14 @@ export class MediaControllerComponent implements OnInit {
       this.cdr.detectChanges();
       this.currentSong = song;
       this.cdr.detectChanges();
+      if(this.songWrapper.nativeElement.offsetWidth < this.songName.nativeElement.offsetWidth) {
+        this.animateText.nativeElement.classList.add('extend-name');
+        this.tooLong = true;
+      } else {
+        this.tooLong = false;
+        this.animateText.nativeElement.classList.contains('extend-name') && this.animateText.nativeElement.classList.remove('extend-name');
+      }
+      console.log(`view name: `, this.songWrapper.nativeElement.offsetWidth, this.songName.nativeElement.offsetWidth);
     });
     this.currentVolume = +(localStorage.getItem('volume')) ?? 50;
     this.loopState = localStorage.getItem('loopState') ? +localStorage.getItem('loopState') : this.loopState;
@@ -101,8 +112,12 @@ export class MediaControllerComponent implements OnInit {
     this.currentSong && this.audioService.play({
       isPlaying: this.isPlaying,
       dirName: this.currentSong.dirName,
-      name: this.currentSong.name
+      name: this.currentSong.name,
+      image: this.currentSong.image,
+      album: this.currentSong.album,
+      lyrics: this.currentSong.lyrics
     }, true, this.audioService.currentIndex);
+    // console.log(this.currentSong);
   }
 
   toggleShuffle() {

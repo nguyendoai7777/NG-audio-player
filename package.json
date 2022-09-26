@@ -37,11 +37,12 @@
     "@angular/compiler": "14.0.6",
     "@angular/core": "14.0.6",
     "@angular/forms": "14.0.6",
-    "@angular/material": "14.2.0",
     "@angular/language-service": "14.0.6",
+    "@angular/material": "14.2.0",
     "@angular/platform-browser": "14.0.6",
     "@angular/platform-browser-dynamic": "14.0.6",
     "@angular/router": "14.0.6",
+    "jsmediatags": "3.9.7",
     "rxjs": "7.5.6",
     "tslib": "^2.4.0",
     "zone.js": "~0.11.6"

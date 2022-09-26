@@ -1,8 +1,10 @@
 <div class="info-box flex">
-  <div class="disc-avatar"></div>
-  <div class="song-info">
-    <div class="name">{{currentSong?.name}}</div>
-    <div class="artist">huỳnh tú</div>
+  <div class="disc-avatar" [style.background-image]="'url(' + currentSong?.image +')'"></div>
+  <div class="song-info" #songWrapper>
+      <div class="animate-text flex align-items-center" style="height: fit-content" #animateText>
+        <div class="name" #songName>{{currentSong?.name}}</div>
+        <div *ngIf="tooLong" style="padding-left: 20px" class="name">{{currentSong?.name}}</div>
+      </div>
   </div>
 </div>
 <div class="flex" style="flex: 1;">

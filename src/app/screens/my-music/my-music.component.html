@@ -5,12 +5,17 @@
     <import-music-folder (click)="openImportConfirmPopup()"></import-music-folder>
   </div>
   <mat-tab-group class="special-tab">
+
+    <mat-tab label="Folders">
+      <div class="tab-item song-list scrollbar-styling">
+        <ng-container *ngTemplateOutlet="folder"></ng-container>
+      </div>
+    </mat-tab>
     <mat-tab label="Songs">
       <div class="tab-item song-list scrollbar-styling">
         <ng-container *ngTemplateOutlet="allSong"></ng-container>
       </div>
     </mat-tab>
-    <mat-tab label="Albums"><span class="tab-item">1231</span></mat-tab>
     <mat-tab label="Artists"><span class="tab-item">1231</span></mat-tab>
   </mat-tab-group>
 </div>
@@ -20,7 +25,7 @@
     <ng-container *ngIf="currentIndex === i">
       <svg width="20" height="20" class="now-playing"><use [attr.href]="song.isPlaying ? '#now-playing-c': '#now-pause-c'" /></svg>
     </ng-container>
-    <div class="name">{{song.name}} </div>
+    <div class="name">{{song.title}} </div>
     <div class="play-btn icon-button rad" matRipple>
       <svg
         [style.opacity]="currentIndex === i? '1': ''"
@@ -29,5 +34,11 @@
         <use [attr.xlink:href]="song.isPlaying ? '#pause': '#play'"/>
       </svg>
     </div>
+    <div class="type">{{song.type}}</div>
+    <div class="thumbnail" [style.background-image]="'url(' + song.image +')'"></div>
   </div>
+</ng-template>
+
+<ng-template #folder>
+  <div class="flex flex-wrap album-box"></div>
 </ng-template>

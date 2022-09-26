@@ -20,7 +20,7 @@ export class AudioPlayerService {
   }
 
   pause() {
-    console.log(this.audio);
+    // console.log(this.audio);
     this.audio && this.audio.pause();
   }
 
@@ -74,7 +74,7 @@ export class AudioPlayerService {
     }, false, index);
   }
 
-  play({ name, dirName, isPlaying }: Song, isCurrentSong: boolean, index: number) {
+  play({ name, dirName, isPlaying, image, album, lyrics }: Song, isCurrentSong: boolean, index: number) {
     let duration = 0;
     this.currentIndex = index;
     this.isCurrentSong = isCurrentSong;
@@ -130,7 +130,8 @@ export class AudioPlayerService {
         this.audio.pause();
       }
     }
-    this.currentSong$.next({ name, isPlaying, dirName, duration });
+    this.currentSong$.next({ name, isPlaying, dirName, duration, image });
+    console.log(this.currentSong$.getValue());
   }
 
   setVolume() {

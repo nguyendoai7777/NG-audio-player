@@ -4,7 +4,9 @@ import * as fs from 'fs';
 import { STORAGE_KEY, LocalKey } from '../shared/storage-key.const';
 import { APP_ACTION, MUSIC_ACTION, SIDEBAR_ACTION, TITLE_BAR_ACTION } from '../shared/communication.actions.const';
 import { MusicDirInfo } from '../src/app/shared/interfaces/music.interface';
+
 const os = require('os');
+const jsTags = require('jsmediatags');
 
 class SettingStorage {
   #settingPath = `${os.homedir()}\\groover`;
@@ -15,7 +17,7 @@ class SettingStorage {
       this.setData(defaultData);
     } else {
       if (!fs.existsSync(`${os.homedir()}\\groover\\settings.json`)) {
-        fs.writeFileSync(`${os.homedir()}\\groover\\settings.json`, JSON.stringify({MusicDirectories: []}));
+        fs.writeFileSync(`${os.homedir()}\\groover\\settings.json`, JSON.stringify({ MusicDirectories: [] }));
         // this.setData(defaultData);
       }
     }
@@ -87,6 +89,7 @@ function createWindow(): BrowserWindow {
     // transparent: true,
     width: size.width * .7,
     height: size.height * .7,
+    minWidth: 700,
     webPreferences: {
       webSecurity: false,
       nodeIntegration: true,
@@ -159,28 +162,69 @@ function fromMyMusicCommunication() {
     setTimeout(() => {
       sendMusicDirs(MUSIC_ACTION.ViewToProcess.SELECT_DIR);
       win.webContents.send(MUSIC_ACTION.ProcessToView.MUSIC_FOLDER_SELECT, result);
-    }, 500)
+    }, 500);
   });
-  ipcMain.on(MUSIC_ACTION.ViewToProcess.ADD_DIR, (_, data) => {
+  ipcMain.on(MUSIC_ACTION.ViewToProcess.ADD_DIR, async (_, data) => {
     const storage = myStorage.getAllData().getData();
     const existIndex = (storage.MusicDirectories as MusicDirInfo[]).findIndex(dir => dir.name === data.name);
+
+    const getTags = (item) => {
+      return new Promise((resolve, reject) => {
+        new jsTags.Reader(item.dirName)
+          .read({
+            onSuccess: (tag) => {
+              const _data = tag.tags.picture?.data;
+              const _format = tag.tags.picture?.format;
+              const title = tag.tags.title;
+              const album = tag.tags.album || '';
+              const lyrics = tag.tags.lyrics?.lyrics;
+              const type = tag.tags.type;
+              let b64 = '';
+              if (_data && _format) {
+                for (let i = 0; i < _data.length; i++) {
+                  b64 += String.fromCharCode(_data[i]);
+                }
+              }
+              resolve({
+                ...item,
+                type,
+                title,
+                album,
+                lyrics: lyrics || '',
+                image: b64 !== '' ? `data:${_format};base64,${Buffer.from(_data).toString('base64')}` : null
+              });
+            },
+            onError: (error) => {
+              reject(error);
+            }
+          });
+      });
+    };
+
+    const pl = [];
+    for (const s of data.songs) {
+      pl.push(getTags(s));
+    }
+    const r = await Promise.all(pl);
+    data.songs = r;
+
     if (!(existIndex !== -1)) {
       myStorage.setData({ [STORAGE_KEY.MusicDirectories]: [...storage.MusicDirectories || [], data] });
       setTimeout(() => {
         sendMusicDirs(MUSIC_ACTION.ViewToProcess.ADD_DIR);
-      }, 500)
+      }, 500);
     }
   });
   ipcMain.on(MUSIC_ACTION.ViewToProcess.REMOVE_DIR, (_, dirName) => {
     const storage = myStorage.getAllData().getData();
     const existIndex = (storage.MusicDirectories as MusicDirInfo[]).findIndex(dir => dir.name === dirName);
     if (existIndex > -1) {
-      const cloneStorage = [...storage.MusicDirectories]
+      const cloneStorage = [...storage.MusicDirectories];
       const listAfterRemove = cloneStorage.splice(existIndex + 1, 1);
       myStorage.setData({ [STORAGE_KEY.MusicDirectories]: [...listAfterRemove] });
       setTimeout(() => {
         sendMusicDirs(MUSIC_ACTION.ViewToProcess.REMOVE_DIR);
-      }, 500)
+      }, 500);
     }
   });
 }

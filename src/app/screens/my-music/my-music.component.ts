@@ -38,7 +38,7 @@ export class MyMusicComponent implements OnInit {
     this.checkCurrentIndexSongActive();
   }
 
-  play({ name, dirName, isPlaying }: Song, index: number) {
+  play({ name, dirName, isPlaying, image, album, lyrics, title, type }: Song, index: number) {
     this.currentIndex = index;
     for (let i = 0; i < this.allSongs.length; i++) {
       this.allSongs[i].isPlaying = false;
@@ -53,7 +53,7 @@ export class MyMusicComponent implements OnInit {
     } else {
       currentSong = true;
     }
-    this.audioService.play({ name, dirName, isPlaying: this.allSongs[index].isPlaying }, currentSong, index);
+    this.audioService.play({title, type, image, name, dirName, isPlaying: this.allSongs[index].isPlaying }, currentSong, index);
   }
 
   openImportConfirmPopup() {
@@ -67,11 +67,12 @@ export class MyMusicComponent implements OnInit {
 
   onLoad() {
     this.es.ipcRenderer.on(MUSIC_ACTION.ProcessToView.FIRE_DIR_LIST, (_, data) => {
-      console.log(data);
       this.listDir = data || [];
       for (const { songs } of this.listDir) {
-        for (const { name, duration, dirName } of songs) {
+        for (const { name, duration, dirName, lyrics, album, type, title} of songs || []) {
           this.allSongs.push({
+              lyrics,
+              album,
               isPlaying: false,
               name,
               duration,
@@ -85,15 +86,14 @@ export class MyMusicComponent implements OnInit {
         path: data.path
       }));
     });
-    console.log(this.es);
     this.listDirWithoutSongs = (this.es.listDir || []).map(data => ({
       name: data.name,
       path: data.path
     }));
     this.listDir = this.es.listDir;
     for (const { songs } of this.listDir) {
-      for (const { name, duration, dirName } of songs) {
-        this.allSongs.push({ isPlaying: false, name, duration, dirName: this.sanitizer.bypassSecurityTrustUrl(dirName) as string });
+      for (const {title, type, name, duration, dirName, image, lyrics, album, } of songs || []) {
+        this.allSongs.push({title, type, lyrics, album, image, isPlaying: false, name, duration, dirName: this.sanitizer.bypassSecurityTrustUrl(dirName) as string });
       }
     }
     this.audioService.currentList$.next(this.allSongs);
@@ -103,7 +103,7 @@ export class MyMusicComponent implements OnInit {
     this.audioService.currentSong$.subscribe(song => {
       if (song) {
         this.currentIndex = this.audioService.currentIndex;
-        this.allSongs = this.audioService.currentList$.getValue()
+        this.allSongs = this.audioService.currentList$.getValue();
         this.allSongs[this.audioService.currentIndex].isPlaying = song.isPlaying;
         this.cdr.detectChanges();
       }
@@ -111,3 +111,4 @@ export class MyMusicComponent implements OnInit {
   }
 
 }
+

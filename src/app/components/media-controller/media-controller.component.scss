@@ -23,9 +23,16 @@
     color: var(--text-color)
   }
   .song-info {
-    padding: 10px 0 10px 7px;
+    height: fit-content;
+    overflow: hidden;
+    padding: 10px 0;
+    width: calc(var(--sidebar-width) - 108px);
+    .name-wrapper {
+      width: 100%;
+    }
     .name {
       white-space: nowrap;
+      width: fit-content;
     }
     .artist {
       padding-top: 7px;
@@ -37,7 +44,7 @@
     min-width: var(--media-controller-height);
     height: var(--media-controller-height);
     border-radius: 50%;
-    background: linear-gradient(40deg, rgba(2, 0, 36, 1) 0%, rgba(9, 9, 121, 1) 10%, rgba(84, 255, 0, 1) 20%, rgba(61, 0, 255, 1) 30%, rgba(255, 96, 0, 1) 37%, rgba(0, 255, 19, 1) 50%, rgba(0, 255, 211, 1) 60%, rgba(255, 0, 217, 1) 70%, rgba(234, 255, 0, 1) 80%, rgba(109, 0, 255, 1) 90%, rgba(255, 0, 59, 1) 100%);
+    background-size: cover;
   }
 }
 .sub-controller {
@@ -108,4 +115,24 @@
 }
 .t-action-active {
   background-color: rgba(0,0,0,.25)
+}
+
+.extend-name {
+  animation-name: auto-text;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+  animation-duration: 20s;
+  text-overflow: clip;
+  animation-delay: 2s;
+  &:hover {
+    animation-play-state: paused;
+  }
+}
+@keyframes auto-text {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
 }

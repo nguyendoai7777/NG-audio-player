@@ -5,9 +5,13 @@ export interface SongInfo {
 export interface Song {
   name: string;
   duration?: number;
-  albums?: string;
   dirName?: string;
   isPlaying?: boolean;
+  image?: string;
+  album?: string;
+  lyrics?: string;
+  type?: string;
+  title?: string;
 }
 
 export interface MusicDirInfo {

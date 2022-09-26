@@ -9,14 +9,14 @@ export const ROOT_ROUTES: CustomRoute[] = [
       name: 'My Music',
     }
   },
-  {
+/*  {
     name: 'RecentPlay',
     path: 'recent-play',
     loadChildren: () => import('../../screens/recent-play/recent-plays.module').then(m => m.RecentPlaysModule),
     data: {
       name: 'Recent Play',
     }
-  },
+  },*/
   {
     name: 'NowPlay',
     path: 'now-playing',

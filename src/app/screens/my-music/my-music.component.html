@@ -1,19 +1,17 @@
-
-
 <div class="px-regular" style="padding-right: 0;">
   <div class="import-btn mr-regular">
     <import-music-folder (click)="openImportConfirmPopup()"></import-music-folder>
   </div>
-  <mat-tab-group class="special-tab">
+  <mat-tab-group class="special-tab" [selectedIndex]="currentTabIndex" (selectedIndexChange)="onTabIndexChange($event)">
 
-    <mat-tab label="Folders">
-      <div class="tab-item song-list scrollbar-styling">
-        <ng-container *ngTemplateOutlet="folder"></ng-container>
-      </div>
-    </mat-tab>
     <mat-tab label="Songs">
       <div class="tab-item song-list scrollbar-styling">
         <ng-container *ngTemplateOutlet="allSong"></ng-container>
+      </div>
+    </mat-tab>
+    <mat-tab label="Folders">
+      <div class="tab-item song-list scrollbar-styling">
+        <ng-container *ngTemplateOutlet="folder"></ng-container>
       </div>
     </mat-tab>
     <mat-tab label="Artists"><span class="tab-item">1231</span></mat-tab>
@@ -23,7 +21,9 @@
 <ng-template #allSong>
   <div *ngFor="let song of allSongs; index as i" class="flex song align-items-center" (click)="play(song, i)">
     <ng-container *ngIf="currentIndex === i">
-      <svg width="20" height="20" class="now-playing"><use [attr.href]="song.isPlaying ? '#now-playing-c': '#now-pause-c'" /></svg>
+      <svg width="20" height="20" class="now-playing">
+        <use [attr.href]="song.isPlaying ? '#now-playing-c': '#now-pause-c'"/>
+      </svg>
     </ng-container>
     <div class="name">{{song.title}} </div>
     <div class="play-btn icon-button rad" matRipple>
@@ -40,5 +40,33 @@
 </ng-template>
 
 <ng-template #folder>
-  <div class="flex flex-wrap album-box"></div>
+  <div class="flex flex-wrap folder-wrapper">
+    <div *ngFor="let al of listDir" class="box-size cursor-pointer">
+      <div class="flex flex-wrap album-box relative">
+        <div matRipple [matRippleColor]="matRippleDarkColor" class="layer main-layer" [style.background-image]="'url(' + al?.thumb +')'"></div>
+        <div class="layer sub-layer"></div>
+      </div>
+      <div class="dir-name">{{al.name}}</div>
+    </div>
+    <!--<div class="flex flex-wrap album-box"></div>
+    <div class="flex flex-wrap album-box"></div>
+    <div class="flex flex-wrap album-box"></div>
+    <div class="flex flex-wrap album-box"></div>
+    <div class="flex flex-wrap album-box"></div>
+    <div class="flex flex-wrap album-box"></div>
+    <div class="flex flex-wrap album-box"></div>
+    <div class="flex flex-wrap album-box"></div>
+    <div class="flex flex-wrap album-box"></div>
+    <div class="flex flex-wrap album-box"></div>
+    <div class="flex flex-wrap album-box"></div>
+    <div class="flex flex-wrap album-box"></div>
+    <div class="flex flex-wrap album-box"></div>
+    <div class="flex flex-wrap album-box"></div>
+    <div class="flex flex-wrap album-box"></div>
+    <div class="flex flex-wrap album-box"></div>
+    <div class="flex flex-wrap album-box"></div>
+    <div class="flex flex-wrap album-box"></div>
+    <div class="flex flex-wrap album-box"></div>
+    <div class="flex flex-wrap album-box"></div>-->
+  </div>
 </ng-template>

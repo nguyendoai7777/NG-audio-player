@@ -26,7 +26,7 @@
   </div>
 
   <div class="on-hide nav-btn-list">
-    <nav-button *ngFor="let nav of navBtns" [routerLink]="nav.routerLink" [label]="nav.label" [iconHref]="nav.iconHref"></nav-button>
+    <nav-button *ngFor="let nav of navBtns" routerLinkActive="activated" [routerLink]="nav.routerLink" [label]="nav.label" [iconHref]="nav.iconHref"></nav-button>
   </div>
   <div class="on-hide top-divider flex">
     <nav-button routerLink="playlists" label="Playlist" iconHref="play-list"></nav-button>

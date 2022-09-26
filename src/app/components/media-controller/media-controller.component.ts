@@ -58,7 +58,6 @@ export class MediaControllerComponent implements OnInit {
         this.tooLong = false;
         this.animateText.nativeElement.classList.contains('extend-name') && this.animateText.nativeElement.classList.remove('extend-name');
       }
-      console.log(`view name: `, this.songWrapper.nativeElement.offsetWidth, this.songName.nativeElement.offsetWidth);
     });
     this.currentVolume = +(localStorage.getItem('volume')) ?? 50;
     this.loopState = localStorage.getItem('loopState') ? +localStorage.getItem('loopState') : this.loopState;

@@ -73,8 +73,8 @@ export class ElectronService {
 
   listenListDirChange() {
     this.ipcRenderer.on(MUSIC_ACTION.ProcessToView.FIRE_DIR_LIST, (_, data) => {
-      console.log('fire to view: ', data);
       this.listDir = data || [];
+      console.log('fire: ', data);
     });
 
   }

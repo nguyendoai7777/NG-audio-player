@@ -10,6 +10,9 @@
   background-color: #2D2F35;
   transition: all var(--transition);
   overflow: hidden;
+  .activated {
+    background-color: #000;
+  }
   &.SidebarExpanded {
     width: 50px;
     min-width: 50px;

@@ -1,7 +1,7 @@
 import { app, BrowserWindow, dialog, ipcMain, screen } from 'electron';
 import * as path from 'path';
 import * as fs from 'fs';
-import { STORAGE_KEY, LocalKey } from '../shared/storage-key.const';
+import { LocalKey, STORAGE_KEY } from '../shared/storage-key.const';
 import { APP_ACTION, MUSIC_ACTION, SIDEBAR_ACTION, TITLE_BAR_ACTION } from '../shared/communication.actions.const';
 import { MusicDirInfo } from '../src/app/shared/interfaces/music.interface';
 
@@ -89,7 +89,7 @@ function createWindow(): BrowserWindow {
     // transparent: true,
     width: size.width * .7,
     height: size.height * .7,
-    minWidth: 700,
+    minWidth: 988,
     webPreferences: {
       webSecurity: false,
       nodeIntegration: true,
@@ -167,7 +167,6 @@ function fromMyMusicCommunication() {
   ipcMain.on(MUSIC_ACTION.ViewToProcess.ADD_DIR, async (_, data) => {
     const storage = myStorage.getAllData().getData();
     const existIndex = (storage.MusicDirectories as MusicDirInfo[]).findIndex(dir => dir.name === data.name);
-
     const getTags = (item) => {
       return new Promise((resolve, reject) => {
         new jsTags.Reader(item.dirName)
@@ -205,13 +204,18 @@ function fromMyMusicCommunication() {
     for (const s of data.songs) {
       pl.push(getTags(s));
     }
-    const r = await Promise.all(pl);
-    data.songs = r;
-
+    let thumb = '';
+    data.songs = await Promise.all(pl);
+    for (let i = 0; i < data.songs.length; i++) {
+      if (data.songs[i].image) {
+        data.thumb =  data.songs[i].image;
+        break;
+      }
+    }
     if (!(existIndex !== -1)) {
       myStorage.setData({ [STORAGE_KEY.MusicDirectories]: [...storage.MusicDirectories || [], data] });
       setTimeout(() => {
-        sendMusicDirs(MUSIC_ACTION.ViewToProcess.ADD_DIR);
+        sendMusicDirs();
       }, 500);
     }
   });
@@ -220,8 +224,8 @@ function fromMyMusicCommunication() {
     const existIndex = (storage.MusicDirectories as MusicDirInfo[]).findIndex(dir => dir.name === dirName);
     if (existIndex > -1) {
       const cloneStorage = [...storage.MusicDirectories];
-      const listAfterRemove = cloneStorage.splice(existIndex + 1, 1);
-      myStorage.setData({ [STORAGE_KEY.MusicDirectories]: [...listAfterRemove] });
+      const _ = cloneStorage.splice(existIndex, 1);
+      myStorage.setData({ [STORAGE_KEY.MusicDirectories]: [...cloneStorage] });
       setTimeout(() => {
         sendMusicDirs(MUSIC_ACTION.ViewToProcess.REMOVE_DIR);
       }, 500);

@@ -66,8 +66,39 @@
     padding-right: 18px;
   }
 }
-
-
-.album-box {
-
+.folder-wrapper {
+  margin: 0 -10px;
+  .box-size {
+    margin: 0 10px 5px 10px;
+  }
+  .album-box {
+    width: 140px;
+    height: 140px;
+    border-radius: 6px;
+    .layer {
+      position: absolute;
+      width: 130px;
+      height: 130px;
+      border-radius: 4px;
+    }
+    .main-layer {
+      bottom: 0;
+      left: 0;
+      z-index: 3;
+      border: 1px solid #585858;
+      background-color: #000;
+      background-size: cover;
+    }
+    .sub-layer {
+      top: 0;
+      right: 0;
+      z-index: 2;
+      border: 1px solid #262626;
+    }
+  }
+  .dir-name {
+    color: var(--text-color);
+    padding-top: 10px;
+    width: 140px;
+  }
 }

@@ -17,6 +17,7 @@ export interface Song {
 export interface MusicDirInfo {
   name: string;
   path: string;
+  thumb: string;
   songs: Song[];
 }
 

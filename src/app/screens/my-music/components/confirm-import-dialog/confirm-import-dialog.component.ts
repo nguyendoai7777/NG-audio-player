@@ -126,7 +126,6 @@ export class ConfirmImportDialogComponent implements OnInit {
 
   done() {
     this.dialogRef.close();
-    location.reload();
   }
 
   addDir() {

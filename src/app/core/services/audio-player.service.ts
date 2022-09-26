@@ -111,7 +111,7 @@ export class AudioPlayerService {
       const next = () => {
         this.audio.pause();
         this.audio.currentTime = 0;
-        const url = (dirName)['changingThisBreaksApplicationSecurity'];
+        const url = dirName;
         this.audio.src = 'file:///' + url;
         this.audio.onloadedmetadata = () => {
           this.audio.play().then(() => {

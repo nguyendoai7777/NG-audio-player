@@ -13,10 +13,8 @@ import { MediaControllerComponent } from '@components/media-controller/media-con
 import { DSvgComponent } from '@cell-components/d-svg/d-svg.component';
 import { NavButtonComponent } from '@components/sidebar/nav-button/nav-button.component';
 import { MatModule } from './shared/mat.module';
-import { RecentPlaysModule } from '@screens/recent-play/recent-plays.module';
 import { RouterModule, Routes } from '@angular/router';
 import { PageNotFoundComponent } from '@screens/page-not-found/page-not-found.component';
-import { ROOT_ROUTES } from '@constants/routes.const';
 import { TitleBarComponent } from '@components/title-bar/title-bar.component';
 import { SettingComponent } from '@screens/setting/setting.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -98,7 +96,6 @@ const routes: Routes = [
         deps: [HttpClient]
       }
     }),
-    RecentPlaysModule,
     MatSliderModule
   ],
   providers: [],

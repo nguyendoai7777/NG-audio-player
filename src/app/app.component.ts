@@ -44,6 +44,7 @@ export class AppComponent implements OnInit {
       map((x: ActivationEnd) => x.snapshot.data.name),
       takeUntil(this.unsubscribeService.unsubscribe$)
     );
+    console.log(`current route: `, this.router.url);
   }
 
   getRouterOutletState(outlet: RouterOutlet) {

@@ -22,17 +22,19 @@ export class MyMusicComponent implements OnInit {
   isPlaying = false;
   previousSong = '';
   currentIndex = this.audioService.currentIndex;
+  currentTabIndex = +localStorage.getItem('MyMusic.TabIndex') || 0;
+  matRippleDarkColor = 'rgba(255,255,255,0.2)';
 
   constructor(
     private router: Router,
     private dialog: MatDialog,
     private es: ElectronService,
-    private sanitizer: DomSanitizer,
     private audioService: AudioPlayerService,
     private cdr: ChangeDetectorRef
   ) {
     this.onLoad();
   }
+
 
   ngOnInit(): void {
     this.checkCurrentIndexSongActive();
@@ -53,7 +55,7 @@ export class MyMusicComponent implements OnInit {
     } else {
       currentSong = true;
     }
-    this.audioService.play({title, type, image, name, dirName, isPlaying: this.allSongs[index].isPlaying }, currentSong, index);
+    this.audioService.play({ title, type, image, name, dirName, isPlaying: this.allSongs[index].isPlaying }, currentSong, index);
   }
 
   openImportConfirmPopup() {
@@ -67,16 +69,18 @@ export class MyMusicComponent implements OnInit {
 
   onLoad() {
     this.es.ipcRenderer.on(MUSIC_ACTION.ProcessToView.FIRE_DIR_LIST, (_, data) => {
+      console.log('data receive: ', data);
       this.listDir = data || [];
       for (const { songs } of this.listDir) {
-        for (const { name, duration, dirName, lyrics, album, type, title} of songs || []) {
+        for (const { name, duration, dirName, lyrics, album, type, title } of songs || []) {
           this.allSongs.push({
               lyrics,
               album,
               isPlaying: false,
               name,
               duration,
-              dirName: this.sanitizer.bypassSecurityTrustUrl(dirName) as string
+              type, title,
+              dirName
             },
           );
         }
@@ -87,13 +91,14 @@ export class MyMusicComponent implements OnInit {
       }));
     });
     this.listDirWithoutSongs = (this.es.listDir || []).map(data => ({
+      thumb: data.thumb,
       name: data.name,
       path: data.path
     }));
     this.listDir = this.es.listDir;
     for (const { songs } of this.listDir) {
-      for (const {title, type, name, duration, dirName, image, lyrics, album, } of songs || []) {
-        this.allSongs.push({title, type, lyrics, album, image, isPlaying: false, name, duration, dirName: this.sanitizer.bypassSecurityTrustUrl(dirName) as string });
+      for (const { title, type, name, duration, dirName, image, lyrics, album, } of songs || []) {
+        this.allSongs.push({ title, type, lyrics, album, image, isPlaying: false, name, duration, dirName });
       }
     }
     this.audioService.currentList$.next(this.allSongs);
@@ -110,5 +115,8 @@ export class MyMusicComponent implements OnInit {
     });
   }
 
+  onTabIndexChange(index: number): void {
+    localStorage.setItem('MyMusic.TabIndex', String(index));
+  }
 }
 

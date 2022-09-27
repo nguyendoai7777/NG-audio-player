@@ -3,14 +3,17 @@
     <import-music-folder (click)="openImportConfirmPopup()"></import-music-folder>
   </div>
   <mat-tab-group class="special-tab" [selectedIndex]="currentTabIndex" (selectedIndexChange)="onTabIndexChange($event)">
-
     <mat-tab label="Songs">
       <div class="tab-item song-list scrollbar-styling">
         <ng-container *ngTemplateOutlet="allSong"></ng-container>
       </div>
     </mat-tab>
     <mat-tab label="Folders">
-      <div class="tab-item song-list scrollbar-styling">
+      <div
+        class="tab-item song-list scrollbar-styling"
+        [style.overflow-y]="isInnerFolder ? 'hidden !important': 'scroll'"
+        [style.padding-right]="isInnerFolder ? '24px' : '18px'"
+      >
         <ng-container *ngTemplateOutlet="folder"></ng-container>
       </div>
     </mat-tab>
@@ -19,35 +22,118 @@
 </div>
 
 <ng-template #allSong>
-  <div *ngFor="let song of allSongs; index as i" class="flex song align-items-center" (click)="play(song, i)">
-    <ng-container *ngIf="currentIndex === i">
-      <svg width="20" height="20" class="now-playing">
-        <use [attr.href]="song.isPlaying ? '#now-playing-c': '#now-pause-c'"/>
-      </svg>
-    </ng-container>
-    <div class="name">{{song.title}} </div>
-    <div class="play-btn icon-button rad" matRipple>
-      <svg
-        [style.opacity]="currentIndex === i? '1': ''"
-        class="song-state cursor-pointer"
-        [style.transform]="!song.isPlaying ? 'translateX(2px)' : ''">
-        <use [attr.xlink:href]="song.isPlaying ? '#pause': '#play'"/>
-      </svg>
+  <!--<div
+    *ngFor="let song of allSongs; index as i"
+    class="relative sfx"
+    (contextmenu)="openContextMenu($event, song, i)">
+    <div class="flex song align-items-center relative">
+
+      <div
+        class="thumbnail relative"
+        (click)="play(song, i)"
+        matRipple
+        [style.background-image]="'url(' + song.image +')'"
+      >
+        <div class="play-btn icon-button rad">
+          <svg
+            [style.opacity]="currentIndex === i? '1': ''"
+            class="song-state cursor-pointer"
+            [style.transform]="!song.isPlaying ? 'translateX(2px)' : ''">
+            <use [attr.xlink:href]="song.isPlaying ? '#pause': '#play'"/>
+          </svg>
+        </div>
+      </div>
+      <div class="name ">
+        <div class="relative w-fit">
+          {{song.title}}
+          <ng-container *ngIf="currentIndex === i">
+            <svg class="now-playing">
+              <use [attr.href]="song.isPlaying ? '#now-playing-c': '#now-pause-c'"/>
+            </svg>
+          </ng-container>
+        </div>
+
+      </div>
+      <div class="type">{{song.album}}</div>
+      <div class="type">{{song.type}}</div>
     </div>
-    <div class="type">{{song.type}}</div>
-    <div class="thumbnail" [style.background-image]="'url(' + song.image +')'"></div>
+    <div *ngIf="hasContextMenu" class="when-context-open"></div>
+  </div>-->
+  <song-item
+    *ngFor="let song of allSongs; index as i"
+    (ctxMenu)="openContextMenu($event, song, i)"
+    (play)="play(song, i)"
+    [currentIndex]="currentIndex"
+    [index]="i"
+    [hasContextMenu]="hasContextMenu"
+    [song]="song"
+  ></song-item>
+</ng-template>
+
+<ng-template #contextMenu let-tv>
+  <div class="context-menu">
+    <div class="curren-song-name">{{tv.song.title}}</div>
+    <div class="menu-item cursor-pointer" (click)="play(tv.song, tv.index)" matRipple>Play</div>
+    <div class="menu-item cursor-pointer relative add-root flex justify-content-between align-items-center">
+      Add to
+      <svg class="icon-small">
+        <use href="#arrow-next"/>
+      </svg>
+      <div class="add-to">
+        <div matRipple class="item" (click)="close()">New Playlist</div>
+        <div matRipple class="item" (click)="close()"> Playlist One</div>
+        <div matRipple class="item" (click)="close()">VRM</div>
+      </div>
+    </div>
+    <div class="menu-item cursor-pointer" (click)="delete(tv.song)" matRipple>Delete</div>
+    <div class="menu-item cursor-pointer" (click)="select(tv.song)" matRipple>Select</div>
   </div>
 </ng-template>
 
+
+<!-- @start folder -->
 <ng-template #folder>
+
+  <div class="inner-folder" *ngIf="isInnerFolder; else outerFolder">
+    <div class="flex">
+      <div class="tab-folder-header w-fit relative flex align-items-center">
+        <circle-icon-button (click)="isInnerFolder = false;" style="margin-right: 10px;" type="circle" size="small" matRipple icon="arrow-back"></circle-icon-button>
+        {{currentDir.name}}
+      </div>
+      <div class="least-spacing relative"></div>
+    </div>
+    <div class="bd-wrap-fix">
+      <div class="tab-folder-body scrollbar-styling">
+        <song-item
+          *ngFor="let song of currentDir.songs; index as i"
+          (ctxMenu)="openContextMenu($event, song, i)"
+          (play)="playAtFolder(song, i)"
+          [currentIndex]="currentIndexAtFolder"
+          [isPlaying]="song.isPlaying"
+          [index]="i"
+          [hasContextMenu]="hasContextMenu"
+          [song]="song"
+        ></song-item>
+      </div>
+    </div>
+  </div>
+
+
+</ng-template>
+
+<ng-template #outerFolder>
   <div class="flex flex-wrap folder-wrapper">
     <div *ngFor="let al of listDir" class="box-size cursor-pointer">
-      <div class="flex flex-wrap album-box relative">
+      <div
+        class="flex flex-wrap album-box relative"
+        (click)="selectThisFolder(al)"
+      >
         <div matRipple [matRippleColor]="matRippleDarkColor" class="layer main-layer" [style.background-image]="'url(' + al?.thumb +')'"></div>
         <div class="layer sub-layer"></div>
       </div>
       <div class="dir-name">{{al.name}}</div>
     </div>
+
     <!--<div class="flex flex-wrap album-box"></div>
     <div class="flex flex-wrap album-box"></div>
     <div class="flex flex-wrap album-box"></div>
@@ -70,3 +156,4 @@
     <div class="flex flex-wrap album-box"></div>-->
   </div>
 </ng-template>
+<!-- @end folder -->

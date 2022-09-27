@@ -1,9 +1,16 @@
 <div class="info-box flex">
-  <div class="disc-avatar" [style.background-image]="'url(' + currentSong?.image +')'"></div>
+  <div
+    class="disc-avatar"
+    [style.background-image]="'url(' + currentSong?.image +')'"
+    [ngClass]="{
+      paused: !(currentSong?.isPlaying),
+      running: (currentSong?.isPlaying)
+    }"
+  ></div>
   <div class="song-info" #songWrapper>
       <div class="animate-text flex align-items-center" style="height: fit-content" #animateText>
-        <div class="name" #songName>{{currentSong?.name}}</div>
-        <div *ngIf="tooLong" style="padding-left: 20px" class="name">{{currentSong?.name}}</div>
+        <div class="name" #songName>{{currentSong?.title}}</div>
+        <div *ngIf="tooLong" style="padding-left: 20px" class="name">{{currentSong?.title}}</div>
       </div>
   </div>
 </div>

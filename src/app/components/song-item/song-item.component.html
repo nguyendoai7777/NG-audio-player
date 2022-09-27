@@ -1,0 +1,37 @@
+<div
+  class="relative sfx"
+  (contextmenu)="ctxMenu.emit($event)">
+  <div class="flex song align-items-center relative">
+
+    <div
+      class="thumbnail relative"
+      (click)="play.emit()"
+      matRipple
+      [style.background-image]="'url(' + song.image +')'"
+    >
+      <div class="play-btn icon-button rad">
+        <svg
+          [style.opacity]="currentIndex === index? '1': ''"
+          class="song-state cursor-pointer"
+          [style.transform]="!song.isPlaying ? 'translateX(2px)' : ''">
+          <use [attr.xlink:href]="song.isPlaying ? '#pause': '#play'"/>
+        </svg>
+      </div>
+    </div>
+    <div class="name ">
+      <div class="relative w-fit">
+        {{song.title}}
+        <ng-container *ngIf="currentIndex === index">
+          <svg class="now-playing">
+            <use [attr.href]="song.isPlaying ? '#now-playing-c': '#now-pause-c'"/>
+          </svg>
+        </ng-container>
+      </div>
+
+    </div>
+    <div class="type">{{song.album}}</div>
+    <div class="type">{{song.type}}</div>
+    <i>isPlaying: {{song.isPlaying| json}} ~ current: {{currentIndex}} ~ i: {{index}}</i>
+  </div>
+  <div *ngIf="hasContextMenu" class="when-context-open"></div>
+</div>

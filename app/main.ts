@@ -172,12 +172,13 @@ function fromMyMusicCommunication() {
         new jsTags.Reader(item.dirName)
           .read({
             onSuccess: (tag) => {
+              console.log(`each song: `, tag);
               const _data = tag.tags.picture?.data;
               const _format = tag.tags.picture?.format;
               const title = tag.tags.title;
               const album = tag.tags.album || '';
               const lyrics = tag.tags.lyrics?.lyrics;
-              const type = tag.tags.type;
+              const type = tag.type;
               let b64 = '';
               if (_data && _format) {
                 for (let i = 0; i < _data.length; i++) {

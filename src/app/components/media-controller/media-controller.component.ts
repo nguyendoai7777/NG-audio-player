@@ -36,7 +36,6 @@ export class MediaControllerComponent implements OnInit {
     this.audioService.currentTime$.pipe(throttleTime(1000)).subscribe((time: number) => {
       this.currentValue = Math.floor(time);
       this.cdr.detectChanges();
-      // console.log(this.currentValue);
       this.currentTime = convertDurationToTime(this.currentValue);
       this.cdr.detectChanges();
 
@@ -137,16 +136,6 @@ export class MediaControllerComponent implements OnInit {
 
   setLoop() {
     this.loopState = ((this.loopState + 1) % 3);
-/*    switch (this.loopState) {
-      case 0:  // no loop
-        break;
-      case 1:  // loop all
-        break;
-      case 2: // loop current song
-        break;
-      default:
-        break;
-    }*/
     localStorage.setItem('loopState', this.loopState.toString());
   }
 }

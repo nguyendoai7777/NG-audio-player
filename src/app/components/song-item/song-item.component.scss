@@ -1,0 +1,60 @@
+:host {
+  &:nth-child(odd) .sfx .song {
+    background-color: #4e4e4e5e;
+  }
+  &:hover .sfx .song {
+    background-color: #ffffff57;
+  }
+  &:hover .sfx .song {
+    .song-state {
+      opacity: 1
+    }
+  }
+  .song {
+    border-radius: 4px;
+    padding: 11px 10px;
+    transition: var(--transition);
+    font-size: 13px;
+    overflow: hidden;
+    .now-playing {
+      position: absolute;
+      left: calc(100% + 10px);
+      top: -5px;
+      width: 20px;
+      height: 20px;
+    }
+    .name {
+      padding-left: 10px;
+      width: 32%;
+      color: var(--text-color);
+      * {
+        color: var(--text-color);
+      }
+    }
+    .play-btn {
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    .song-state {
+      opacity: 0;
+      width: 20px;
+      height: 20px;
+      fill: #fff;
+    }
+    .type {
+      color: #9d9d9d;
+      width: 250px;
+    }
+    .thumbnail {
+      border-radius: 4px;
+      width: 40px;
+      height: 40px;
+      background-size: cover;
+    }
+  }
+}

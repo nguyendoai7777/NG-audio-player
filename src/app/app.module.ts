@@ -88,6 +88,7 @@ const routes: Routes = [
     FormsModule,
     HttpClientModule,
     SharedModule,
+    MatSliderModule,
     RouterModule.forRoot(routes),
     TranslateModule.forRoot({
       loader: {
@@ -96,9 +97,9 @@ const routes: Routes = [
         deps: [HttpClient]
       }
     }),
-    MatSliderModule
   ],
   providers: [],
+  exports: [ ],
   bootstrap: [AppComponent]
 })
 export class AppModule {

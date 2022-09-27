@@ -7,53 +7,12 @@
   height: calc(100vh - var(--media-controller-height) - (174px) - 32px);
   overflow: auto;
 }
-.song {
-  border-radius: 4px;
-  padding: 11px 10px;
-  transition: var(--transition);
-  font-size: 13px;
-  position: relative;
-  .now-playing {
-    position: absolute;
-    left: 5px;
-    top: 0;
-  }
-  &:nth-child(odd) {
-    background-color: #4e4e4e5e;
-  }
-  &:hover {
-    background-color: #ffffff57;
-  }
-  &:hover {
-    .song-state {
-      opacity: 1
-    }
-  }
-  .name {
-    width: 32%;
-    color: var(--text-color);
-  }
-  .play-btn {
-    width: 35px;
-    height: 35px;
-    border-radius: 50%;
-  }
-  .song-state {
-    opacity: 0;
-    width: 20px;
-    height: 20px;
-    fill: #fff;
-  }
-  .type {
-    margin-left: auto;
-    color: #9d9d9d;
-    width: 160px;
-  }
-  .thumbnail {
-    width: 40px;
-    height: 40px;
-    background-size: cover;
-  }
+.when-context-open {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
 }
 .song-list {
   padding: 10px 0;
@@ -66,10 +25,78 @@
     padding-right: 18px;
   }
 }
+/** @folder */
+.inner-folder {
+  $border-color: var(--border-general-color);
+  $radius: 10px;
+  // border: 1px solid red;
+  @mixin rd {
+    content: '';
+    display: block;
+    position: absolute;
+    z-index: -1;
+  }
+  .least-spacing {
+    flex: 1;
+    &:after {
+      @include rd;
+      right: 0;
+      bottom: 0;
+      width: calc(100% - $radius);
+      height: 20px;
+      border-bottom: 1px solid $border-color;
+    }
+    &:before {
+      @include rd;
+      bottom: 0;
+      left: 0;
+      width: calc(#{$radius} - 1px);
+      height: calc(100% - $radius);
+      border-bottom: 1px solid $border-color;
+      border-left: 1px solid $border-color;
+      border-radius: 0 0 0 $radius
+    }
+  }
+  .tab-folder- {
+    &header {
+      &:after {
+        @include rd;
+        top: -1px;
+        left: -1px;
+        width: 100%;
+        height: calc(#{$radius} - 2px);
+        border-radius: $radius $radius 0 0;
+        border-left: 1px solid transparent;
+        border-top: 1px solid $border-color;
+        border-right: 1px solid $border-color;
+      }
+      padding: 10px 20px 10px 10px;
+      border-radius: $radius $radius 0 0;
+      border-left: 1px solid $border-color;
+      border-top: 1px solid transparent;
+    }
+    &body {
+      padding: 0 4px 0 10px;
+      overflow-y: scroll;
+      height: calc(100vh - var(--media-controller-height) - 20px - 80px - 10px - 51px - 57px - 69px - 10px);
+    }
+  }
+  .bd-wrap-fix {
+    padding: 10px 0;
+    border-bottom: 1px solid $border-color;
+    border-left: 1px solid $border-color;
+    border-right: 1px solid $border-color;
+  }
+}
 .folder-wrapper {
   margin: 0 -10px;
   .box-size {
     margin: 0 10px 5px 10px;
+    &:active {
+      .main-layer, .dir-name {
+        transform: scale(.96);
+      }
+    }
   }
   .album-box {
     width: 140px;
@@ -88,6 +115,7 @@
       border: 1px solid #585858;
       background-color: #000;
       background-size: cover;
+      transition: .3s;
     }
     .sub-layer {
       top: 0;
@@ -100,5 +128,52 @@
     color: var(--text-color);
     padding-top: 10px;
     width: 140px;
+    transition: .3s;
+  }
+}
+.context-menu {
+  padding: 5px 0;
+  border-radius: 3px;
+  background-color: #2c2c2c;
+  min-width: 120px;
+  * {
+    color: var(--text-color);
+  }
+  .curren-song-name {
+    font-size: 11px;
+    padding: 5px 10px;
+  }
+  .menu-item {
+    padding: 10px;
+    font-size: 12.5px;
+    transition: .2s;
+    &:hover {
+      background-color: #484848;
+    }
+    &.add-root:hover {
+      .add-to {
+        opacity: 1;
+        visibility: visible;
+        top: 0;
+      }
+    }
+    .add-to {
+      position: absolute;
+      opacity: 0;
+      visibility: hidden;
+      top: -100%;
+      left: 100%;
+      background-color: #2c2c2c;
+      padding: 5px 0;
+      transition: .2s;
+      .item {
+        padding: 10px;
+        min-width: 100px;
+        width: fit-content;
+        &:hover {
+          background-color: #484848;
+        }
+      }
+    }
   }
 }

@@ -16,6 +16,7 @@ export class AudioPlayerService {
   previousSongName = '';
   isShuffle = false;
   loopState = 0;
+  isGlobalPlaying = false;
   constructor() {
   }
 
@@ -74,7 +75,7 @@ export class AudioPlayerService {
     }, false, index);
   }
 
-  play({ name, dirName, isPlaying, image, album, lyrics }: Song, isCurrentSong: boolean, index: number) {
+  play({ name, dirName, isPlaying, image, album, lyrics, title }: Song, isCurrentSong: boolean, index: number) {
     let duration = 0;
     this.currentIndex = index;
     this.isCurrentSong = isCurrentSong;
@@ -83,20 +84,20 @@ export class AudioPlayerService {
         this.audio = new Audio();
         this.setVolume();
         this.audio.addEventListener('ended', () => {
-          console.log('end r ne');
+          // console.log('end r ne');
           this.currentSong$.next({name, isPlaying: false, dirName})
           this.loopState = localStorage.getItem('loopState') ? +localStorage.getItem('loopState') : this.loopState;
           if(this.loopState === 2) {
-            console.log('vao day');
+            // console.log('vao day');
             this.audio.currentTime = 0;
             void this.audio.play();
           } else {
-            console.log('hay vao day', this.currentIndex, this.currentList$.getValue().length - 1);
+            // console.log('hay vao day', this.currentIndex, this.currentList$.getValue().length - 1);
             if(!(this.currentIndex === this.currentList$.getValue().length - 1)) {
-              console.log('??');
+              // console.log('??');
               this.nextSong(index, this.loopState === 1);
             } else {
-              console.log('?????????????');
+              // console.log('?????????????');
               /*this.audio.currentTime = 0;
               this.currentSong$.next({
                 name: this.currentList$.getValue()[0].name,
@@ -111,8 +112,7 @@ export class AudioPlayerService {
       const next = () => {
         this.audio.pause();
         this.audio.currentTime = 0;
-        const url = dirName;
-        this.audio.src = 'file:///' + url;
+        this.audio.src = 'file:///' + dirName;
         this.audio.onloadedmetadata = () => {
           this.audio.play().then(() => {
             this.duration$.next(Math.floor(this.audio.duration));
@@ -125,13 +125,12 @@ export class AudioPlayerService {
       next();
     } else {
       if (isPlaying) {
-        this.audio.play();
+        void this.audio.play();
       } else {
         this.audio.pause();
       }
     }
-    this.currentSong$.next({ name, isPlaying, dirName, duration, image });
-    console.log(this.currentSong$.getValue());
+    this.currentSong$.next({ name, isPlaying, dirName, duration, image, title });
   }
 
   setVolume() {

@@ -23,6 +23,12 @@ body {
   transition: all var(--icon-transition-duration);
   @include IconButtonActionStyleWithRipple;
 }
+.icon-small {
+  width: 15px;
+  height: 15px;
+  fill: var(--icon-fill);
+}
+
 .icon {
   width: 20px;
   height: 20px;

@@ -9,18 +9,32 @@ import { AlbumsComponent } from './screens/albums/albums.component';
 import { ImportMusicFolderComponent } from './components/import-music-folder/import-music-folder.component';
 import { ConfirmImportDialogComponent } from './components/confirm-import-dialog/confirm-import-dialog.component';
 import { MatRippleModule } from '@angular/material/core';
+import { MatMenuModule } from '@angular/material/menu';
+import { SongItemModule } from '../../components/song-item/song-item.module';
+import { SvgIconButton } from '../../components/circle-icon-button/svg-icon-button.component';
 
 const ROUTES: Route[] = [
-  {path: '', component: MyMusicComponent}
+  { path: '', component: MyMusicComponent }
 ];
 
 @NgModule({
-  declarations: [MyMusicComponent, SongsComponent, ArtistsComponent, AlbumsComponent, ImportMusicFolderComponent, ConfirmImportDialogComponent],
+  declarations: [
+    MyMusicComponent,
+    SongsComponent,
+    ArtistsComponent,
+    AlbumsComponent,
+    ImportMusicFolderComponent,
+    ConfirmImportDialogComponent,
+    SvgIconButton
+  ],
   imports: [
     RouterModule.forChild(ROUTES),
     CommonModule,
     MatTabsModule,
-    MatRippleModule
+    MatRippleModule,
+    MatMenuModule,
+    SongItemModule
   ]
 })
-export class MyMusicModule {}
+export class MyMusicModule {
+}
